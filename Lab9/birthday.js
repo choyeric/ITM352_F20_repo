@@ -1,0 +1,9 @@
+var month = 4;
+var day = 1;
+var step1 = 97;
+var step2 = parseInt(step1 / 4);
+var step3 = step1 + step2;
+var step4 = 1;
+var step6 = step3 + step4;
+var step7 = step6 + day;
+var step8 = step7 % 7;
