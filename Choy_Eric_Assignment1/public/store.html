@@ -1,0 +1,41 @@
+<script src="./products.js"></script>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zen Noods</title>
+
+    <link href="style.css" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <h1>Relax With a Bowl of Noodles</h1>
+    </header>
+
+    <form action="./invoice.html" method="POST">
+        <div>
+            <main>
+                <script>
+                    for (i = 0; i < products.length; i++) {     //for loop to go through all products, from the SmartPhoneProducts code
+                        document.write(`
+                            <section class="item">
+                                <h2>${products[i].item}</h2>
+                                <p>$${products[i].price.toFixed(2)}</p>
+                                <img src=${products[i].img}>
+                                <input type="textbox" id="order_quantity" placeholder="0">
+                                <br>
+                            </section>`
+                        );
+                    }
+                    // checkout button underneath when customer finishes ordering
+                </script>
+            </main>
+        </div>
+        <input type="submit" value="Checkout">
+    </form>
+</body>
+
+</html>
