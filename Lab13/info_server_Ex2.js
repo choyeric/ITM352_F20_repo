@@ -4,7 +4,7 @@ var myParser = require("body-parser");
 const { response } = require('express');
 
 app.use(express.static('./public'));
-app.use(myParser.urlencoded({ extnded: true}));
+app.use(myParser.urlencoded({ extended: true}));
 
 function isNonNegInt(stringToCheck, returnErrors = false) { // Checks whether the string is a valid integer
     errors = []; // assume no errors at first
@@ -17,7 +17,7 @@ function isNonNegInt(stringToCheck, returnErrors = false) { // Checks whether th
 }
 
 app.all('*', function (request, response, next) {
-    response.send(request.method + ' to path ' + request.path);
+    console.log(request.method + ' to path ' + request.path);
     next();
 });
 
