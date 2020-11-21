@@ -1,0 +1,68 @@
+html {
+    background-color: cyan;
+
+}
+
+/* Styling the header */
+h1 {
+    text-align: center;
+    font-size: 50px;
+    font-style: bold;
+    border: 10px solid yellowgreen;
+}
+
+body {
+    justify-content: space-evenly;
+    margin: 30px;
+}
+
+
+/* Styling the products */
+
+main {
+    display: flex;
+}
+
+section {
+    position: relative;
+    text-align: center;
+    margin: 100px;
+}
+
+/* Price and picture styling */
+.item {
+    font-size: 25px;
+    border: 5px solid black;
+    border-radius: 20px;
+}
+
+.item img {
+    height: 300px;
+    width: 300px;
+    border: 5px solid red;
+    margin-bottom: 5px;
+}
+
+
+/*Used from w3 schools, https://www.w3schools.com/howto/howto_js_password_validation.asp */
+input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 6px;
+    margin-bottom: 16px;
+  }
+  
+  /* Style the submit button */
+  input[type=submit] {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  /* Style the container for inputs */
+  .container {
+    background-color: #f1f1f1;
+    padding: 20px;
+  }

@@ -1,0 +1,54 @@
+<script>
+    window.onload = function () {
+      var urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has("username")) { //gets username data and displays in URL
+
+        passCheck(); //will look at checkpassword function below
+      }
+    }
+  </script>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="reg.css">
+</head>
+
+<body>
+    <script>
+        function passCheck() {
+            var fPass = register.password.value
+            var cPass = register.repeat_password.value
+
+            if (fPass != cPass) {
+                alert("Passwords do not match.");
+                response.redirect("registration.html?");
+            }
+        }
+    </script>
+
+    <form name="register" action="" method="POST">
+        <div class="container">
+            <label for="fullname">First and Last name</label>
+            <input type="text" id="fullname" placeholder="First and last name" name="fullname" required>
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="Enter Username" name="username" required>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter Password (case sensitive)" required>
+            <label for="repeat_ password">Re-enter your password</label>
+            <input type="password" id="repeat_password" name="repeat_password" placeholder="Confirm Password" required>
+            <label for="email">E-mail Address</label>
+            <input type="email" id="email" name="email" placeholder="Enter E-mail" required>
+
+            <input type="submit" value="Register" id="submit" onclick="passCheck()">
+    </form>
+    </div>
+
+    <a href="login.html">Already have an account? Sign in!</a>
+
+</body>
+
+</html>
