@@ -9,11 +9,9 @@
 
         // Trying to make textboxes sticky
         if (params.has('reg_submit')) {
-            if (params.has('username')) {
-                reguser = params.get('username');
-                register.username.value = reguser;
+                reguser = document.getElementsByName(username);
+                register['username'].value = reguser;
             }
-        }
     }
 </script>
 
@@ -46,19 +44,19 @@
         <div class="container">
             <h3>Create your Noodle account!</h3>
             <label id="fullname_l">First and Last Name</label>
-            <input type="text" id="fullname" pattern="[a-zA-Z]+[ ]+[a-zA-Z]+"
+            <input type="text" pattern="[a-zA-Z]+[ ]+[a-zA-Z]+"
                 placeholder="Only letters allowed. Max 30 characters." name="fullname" required>
             <label id="username_l">Username</label>
-            <input type="text" id="username" pattern=".[a-z0-9]{3,10}"
+            <input type="text" pattern=".[a-z0-9]{3,10}"
                 placeholder="Only letters and numbers allowed. 4-10 characters long." name="username" required>
             <label id="password_l">Password</label>
-            <input type="password" id="password" pattern=".{6,}" name="password"
+            <input type="password" pattern=".{6,}" name="password"
                 placeholder="Minimum 6 characters long (case sensitive)" required>
             <label id="repeat_password">Re-enter your password</label>
-            <input type="password" id="repeat_password" pattern=".{6,}" name="repeat_password"
+            <input type="password" pattern=".{6,}" name="repeat_password"
                 placeholder="Confirm password" required>
             <label id="email_l">E-mail Address</label>
-            <input type="email" id="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" name="email"
+            <input type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" name="email"
                 placeholder="Enter e-mail with format X@Y.Z" required>
             <input type="submit" value="Register" name="reg_submit" id="reg_submit" onclick="infoCheck()">
     </form>
