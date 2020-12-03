@@ -1,3 +1,8 @@
+/* 
+Name: Eric Choy
+Purpose: Hosting a server for assignment 2
+*/
+
 var querystring = require('querystring');
 var express = require('express'); // Express package
 var app = express();
@@ -100,58 +105,88 @@ app.post("/login.html", function (request, response) {
 });
 
 app.post("/registration.html", function (request, response) {
-   // Username variables
-   var username = request.body.username;
+
+   // Make case insensitive
    username = request.body.username.toLowerCase();
-   
-   // Password variables
-   var fPass = request.body.password;
-   var cPass = request.body.repeat_password;
-   errors = {};
+   email = request.body.email.toLowerCase();
 
-   if (typeof user_data[username] != 'undefined') {
-      errors.username_error = "Username already in use. Please create new username." // This checks for used usernames
-   }
-   if ((/[a-z0-9]+/).test(request.body.username) == false) { // Trying from the reg expression w3 schools stuff
-      errors.username_error = "Numbers and Letters only";
-   }
-   if (username.length < 4 && username.length > 10) {
-      errors.username_error = "Username must be between 4 to 10 characters long. Please enter new username.";
-   }
+   // Turns quantity object into a string
+   quantityQstring = qs.stringify(input_quantities);
 
-   fullname = request.body.fullname;
-   if (fullname.length > 30) {
-      errors.fullname_error = "Full name max 30 characters. Please shorten.";
+   // Variables for error messages
+   var reg_errors = [];
+   var name_errors = [];
+   var user_errors = [];
+   var pass_errors = [];
+   var email_errors = [];
+
+   // Full name error checks
+   if (request.body.fullname > 30) { // Check to see if name is too long
+      reg_errors.push("Name is too long. Please shorten below 30 characters.");
+      name_errors.push("Name is too long. Please shorten below 30 characters.");
    }
    if ((/[a-zA-Z]+[ ]+[a-zA-Z]+/).test(request.body.fullname) == false) { // Another attempt from the reg expression stuff
-      errors.fullname_error = "Only use letters and add one space between first & last name";
+      reg_errors.push("Only use letters and add one space between first & last name.");
+      name_errors.push("Only use letters and add one space between first & last name.");
    }
 
-   password = request.body.password; // Password checks
-   if (password.length < 6) {
-      errors.password_error = "Password must be at least 6 characters long. Please enter new password.";
+   // Username error checks
+   if (typeof user_data[username] != 'undefined') {
+      reg_errors.push("Username already in use.");
+      user_errors.push("Username already in use.");
    }
-   if (fPass != cPass) {
-      errors.password_error = "Passwords do not match.";
+   if (username.length < 4) {
+      reg_errors.push("Usernames must be at least 4 characters long.");
+      user_errors.push("Usernames must be at least 4 characters long.");
+   }
+   if (username.length > 10) {
+      reg_errors.push("Usernames can only have up to 10 characters.");
+      user_errors.push("Usernames can only have up to 10 characters.");
+   }
+   if ((/^[0-9a-zA-Z]+$/).test(username) == false) {
+      reg_errors.push("Usernames may only have letters or numbers.");
+      user_errors.push("Usernames may only have letters or numbers.");
    }
 
-   email = request.body.email; // Email checks
-   if ((/[a-z0-9._]+@[a-z0-9]+\.[a-z]+/).test(request.body.email) == false) { // Round 3 of reg expression checks
-      errors.email_error = "Please enter a proper email";
+   // Password error checks
+   var fPass = request.body.password;
+   var cPass = request.body.repeat_password;
+
+   if (request.body.password.length < 6) {
+      reg_errors.push("Password must be at least 6 characters long.");
+      pass_errors.push("Password must be at least 6 characters long.");
+   }
+   if (request.body.password != request.body.repeat_password) {
+      reg_errors.push("Passwords do not match.");
+      pass_errors.push("Passwords do not match.");
    }
 
-   if ((Object.keys(errors).length == 0) & (fPass == cPass)) {
+   // Email error checks
+   if (/^[a-zA-Z0-9._]+@[a-zA-Z.]+\.[a-zA-Z]{2,3}$/.test(email) == false) { // Looked online for help on this
+      reg_errors.push("Email format is invalid.");
+      email_errors.push("Email format is invalid.");
+   }
+
+   // Help from Lab14 code; puts in data if there are no errors
+   if (reg_errors.length == 0) {
+      POST = request.body;
+      username = POST["username"];
       user_data[username] = {};
-      user_data[username].username = request.body.username
-      user_data[username].password = request.body.password;
-      user_data[username].email = request.body.email;
-      user_data[username].fullname = request.body.fullname;
+      user_data[username].fullname = POST["fullname"];
+      user_data[username].password = POST["password"];
+      user_data[username].email = POST["email"];
 
       fs.writeFileSync(filename, JSON.stringify(user_data)); //saves/writes registaration data into the user_data json file
       quantityQstring = qs.stringify(input_quantities); //turns quantity object into a string
       response.redirect("/invoice.html?" + quantityQstring + `&username=${username}`); //if all good, send to invoice
-   } else {
-      qstring = qs.stringify(request.body) + "&" + qs.stringify(errors); //puts errors into a query string
-      response.redirect('/registration.html?' + qstring); //if there are errors, send back to registration page to retype
+   }
+
+   if (reg_errors.length != 0) {
+      request.query.fullname = request.body.fullname;
+      request.query.username = request.body.username;
+      request.query.password = request.body.password;
+      request.query.repeat_password = request.body.repeat_password;
+      request.query.email = request.body.email;
+      response.redirect('./registration.html?');
    }
 });

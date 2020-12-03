@@ -1,4 +1,9 @@
-<script src="./products.js"> /* From the workshop powerpoint */</script>
+<script src="./products.js"> /* From the workshop powerpoint */
+    /*
+    Name: Eric Choy
+    Purpose: Assignment 2 invoice page layout
+    */
+</script>
 
 <script>
     // Used code from Lab12 to get data from quantity textbox
@@ -33,15 +38,15 @@
     <title>Zen Noods Receipt</title>
     <style>
         body {
-            background: rgb(39, 255, 255);
             text-align: center;
+            background-image: url(./images/noodles.png);
         }
 
         table {
-            border-collapse: collapse;
             margin-left: auto;
             margin-right: auto;
             border: solid black;
+            background-color: lightblue;
         }
 
         th {
@@ -52,23 +57,38 @@
             height: 30px;
             padding-left: 10px;
         }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: red;
+            color: white;
+            text-align: center;
+            font-size: 30px;
+        }
+
+        h3 {
+            color: white;
+            font-size: 25px;
+        }
     </style>
 </head>
 
 <body>
     <header>
-        <script>
+        <h3><script>
             if (params.has('username')) { // Prints the username on the invoice if they are logged in
                 usr = params.get('username');
-                document.write(`${usr}`)
+                document.write(`${usr}'s invoice`)
             }
-        </script>
+        </script></h3>
         <h1>Zen Noods Receipt</h1>
     </header>
     <table border="2">
         <tbody>
             <tr id="invoice">
-                <th style="text-align: center;" width="43%">Item</th>
+                <th style="text-align: center;" width="20%">Item</th>
                 <th style="text-align: center;" width="11%">Quantity</th>
                 <th style="text-align: center;" width="13%">Price</th>
                 <th style="text-align: center;" width="54%">Extended Price</th>

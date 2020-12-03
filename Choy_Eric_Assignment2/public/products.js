@@ -1,3 +1,8 @@
+/*
+Author: Eric Choy
+Purpose: Listing products for online store
+*/
+
 products = [
     {
         "item": "Chicken Ramen",

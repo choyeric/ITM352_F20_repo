@@ -1,3 +1,4 @@
+/*Used from w3 schools, https://www.w3schools.com/howto/howto_js_password_validation.asp */
 input {
     width: 100%;
     padding: 12px;
@@ -6,16 +7,29 @@ input {
     box-sizing: border-box;
     margin-top: 6px;
     margin-bottom: 16px;
-  }
+}
   
-  /* Style the submit button */
-  input[type=submit] {
+ /* Style the submit button */
+input[type=submit] {
     background-color: #4CAF50;
     color: white;
-  }
+}
   
-  /* Style the container for inputs */
-  .container {
+/* Style the container for inputs */
+.container {
     background-color: #f1f1f1;
     padding: 20px;
-  }
+}
+
+h1 {
+  font-size: small;
+}
+
+body {
+  margin-left: 1000px;
+  margin-right: 1000px;
+}
+
+h3 {
+  text-align: center;
+}
