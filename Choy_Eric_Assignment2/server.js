@@ -187,6 +187,6 @@ app.post("/registration.html", function (request, response) {
       request.query.password = request.body.password;
       request.query.repeat_password = request.body.repeat_password;
       request.query.email = request.body.email;
-      response.redirect('./registration.html?');
+      response.redirect('./registration.html');
    }
 });
