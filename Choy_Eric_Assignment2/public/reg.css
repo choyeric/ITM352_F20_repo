@@ -26,8 +26,8 @@ h1 {
 }
 
 body {
-  margin-left: 1000px;
-  margin-right: 1000px;
+  width: 25%;
+  margin: 0 auto;
 }
 
 h3 {
