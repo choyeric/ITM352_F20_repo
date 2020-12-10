@@ -3,18 +3,30 @@ html {
 }
 
 /* Styling the header */
-h1 {
-    text-align: center;
+.topnav {
     font-size: 50px;
     font-style: bold;
-    border: 10px solid yellowgreen;
+    border-bottom: 10px solid yellowgreen;
+}
+
+.topnav a{
+    float: right;
+    margin-left: 10px;
+    font-size: 30px;
+}
+
+.loginPopup {
+    display: none;
+}
+
+.registerPopup {
+    display: none;
 }
 
 body {
     justify-content: space-evenly;
     margin: 30px;
 }
-
 
 /* Styling the products */
 
@@ -31,14 +43,14 @@ section {
 
 /* Price and picture styling */
 .item {
-    font-size: 25px;
+    font-size: 15px;
     border: 5px solid black;
     border-radius: 20px;
 }
 
 .item img {
-    height: 300px;
-    width: 300px;
+    height: 150px;
+    width: 150px;
     border: 5px solid red;
     margin-bottom: 5px;
 }
