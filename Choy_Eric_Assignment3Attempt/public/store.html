@@ -1,0 +1,60 @@
+<script>
+    /* From the workshop powerpoint
+    Name: Eric Choy
+    Purpose: Assignment 3 store page layout
+    */</script>
+<script src="./functions.js"></script>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zen Noods</title>
+
+    <link href="style.css" rel="stylesheet">
+</head>
+
+<body>
+    <script>// Using a navbar based off code from w3schools to have the header with a login/register button</script>
+    <div id="navbar">
+        <a href="./store.html"><img src="./images/noodles.png" style='height: 40px;'></a>
+
+        <script>
+            // Following Prof. Port's workshop for cookies to change login buttons
+            var cookieUser = getCookie('loggeduser');
+            if (document.cookie != '') {
+                document.write(`<a style='float: right;' href='./logout'>Logout ${cookieUser}</a>`);
+            }
+            if (document.cookie == '') {
+                document.write(`<a style='float: right;' href="./registration.html">Register</a>
+        <a style='float: right;' href="./login.html">Login</a>`)
+            }
+        </script>
+        <a href="./cart.html" style='float: right;'>Your Cart</a>
+    </div>
+
+    <h1>Relax With a Bowl of Noodles</h1>
+        <div>
+            <main>
+                <ul>
+                <script>
+                    // Borrowed from Assignment 3 code examples, this loads the products from the json file
+                    var products_data;
+                    loadJSON('get_products_data', function(response) {
+                         // Parsing JSON string into object
+                         products_data = JSON.parse(response);
+                    });
+                    var this_product_key = ''
+                    // This loads the individual product types (ramen, udon, etc) into a screen for users to view different types
+                    for (products_key in products_data) {
+                        if (products_key == this_product_key) continue;
+                        document.write(`<li><a href='./display_products.html?products_key=${products_key}'>${products_key}</a></li>`)
+                    }
+                    </script>
+                    </ul>
+            </main>
+        </div>
+</body>
+
+</html>

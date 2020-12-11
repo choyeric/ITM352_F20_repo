@@ -7,7 +7,7 @@ Purpose: Assignment 2 login page layout
 
 <html lang="en">
 <script>
-  // If user inputs incorrect info, displays error message
+   // If user inputs incorrect info, displays error message
   // Used similar code from Assignment1 in store.html
   window.onload = function () {
     const urlParams = new URLSearchParams(window.location.search);
@@ -28,7 +28,7 @@ Purpose: Assignment 2 login page layout
 <body>
   <form name="login" action="" method="POST">
     <div class="container">
-      <h3>Please login to continue shopping.</h3>
+      <h3>Please login to continue with your purchase.</h3>
       <label for="username">Username</label>
       <input type="text" id="username" placeholder="Enter Username" name="username" required>
       <label for="password">Password</label>
@@ -37,6 +37,8 @@ Purpose: Assignment 2 login page layout
   </form>
   </div>
   <a href="registration.html">Don't have an account? Register here!</a>
+  <br> <br>
+  <a href="store.html">Still shopping? Return to store!</a>
 </body>
 
 </html>

@@ -1,0 +1,77 @@
+<script src="./products.js">
+    /*
+    Name: Eric Choy
+    Purpose: Creating a cart page for users to check their selection before checkout/invoice
+    */
+</script>
+
+<script>
+    function isNonNegInt(stringToCheck, returnErrors = false) { // Checks whether the string is a valid integer
+        errors = []; // Borrowed from the example on Assignment1
+        if (stringToCheck == "") stringToCheck = 0;
+        if (Number(stringToCheck) != stringToCheck) errors.push('<font color="red">Not a number!</font>'); // Check if string is a number value
+        else if (stringToCheck < 0) errors.push('<font color="red">Negative value!</font>'); // Check if it is non-negative
+        else if (parseInt(stringToCheck) != stringToCheck) errors.push('<font color="red">Not an integer!</font>'); // Check that it is an integer
+
+        return returnErrors ? errors : (errors.length == 0);
+    }
+
+    function checkQuantityTextbox(theTextbox) { // Borrowed from example on Assignment1
+        errs = isNonNegInt(theTextbox.value, true); // If non negative integer, then data is valid
+        if (errs.length == 0) errs = ['Quantity:']; // When typing in the textbox, this will display 
+        if (theTextbox.value.trim() == '') errs = ['Quantity:'];
+        document.getElementById(theTextbox.name + '_label').innerHTML = errs.join(", ");
+    }
+
+    // Used code from Lab12 to get data from quantity textbox
+    let params = (new URL(document.location)).searchParams;
+
+    // If there is a user logged in
+    if (params.has('username')) {
+        alert(`Hello ${params.get('username')}. Thank you for your purchase.`);
+    } else { // If there is nobody logged in, don't allow to view cart and direct to store page
+        alert('Please view our store and login before checking your cart');
+        window.location = `./store.html${document.location.search}`;
+        window.stop;
+    }
+    var quantities = [];
+    // Borrowed from example from Assignment1
+    if (params.has('purchase_submit')) {
+        for (i = 0; i < products.length; i++) {
+            if (params.has(`quantity${i}`)) {
+                a_qty = params.get(`quantity${i}`);
+                quantities[i] = a_qty;
+            }
+        }
+    }
+    console.log(quantities);
+</script>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart</title>
+
+    <link href="style.css" rel="stylesheet">
+</head>
+
+<body>
+    <form name=cart action="./invoice.html" method="GET">
+        <div>
+            <main>
+                <script>
+                    for (i = 0; i < request.session.cart.length; i++) {
+                        document.write(`<h2>${products[i].item}</h2>
+                            <img src="${products[i].img}">
+                            <p class="price">${products[i].price}</p>
+                            <input type="text" disabled value="${a_qty}" onkeyup="checkQuantityTextbox(this);">`)
+                    };
+                </script>
+            </main>
+        </div>
+    </form>
+</body>
+
+</html>

@@ -1,0 +1,37 @@
+<script src="./products.js">
+    /* From the workshop powerpoint
+    Name: Eric Choy
+    Purpose: Assignment 3 cart page
+    */</script>
+<script src="./functions.js"></script>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zen Noods</title>
+
+    <link href="style.css" rel="stylesheet">
+</head>
+
+<body>
+    <script>// Using a navbar based off code from w3schools to have the header with a login/register button</script>
+    <div id="navbar">
+        <a href="./store.html"><img src="./images/noodles.png" style='height: 40px;'></a>
+        <script>
+            // Following Prof. Port's workshop for cookies to change login buttons
+            var cookieUser = getCookie('loggeduser');
+            if (document.cookie != '') {
+                document.write(`<a style='float: right;' href='./logout'>Logout ${cookieUser}</a>`);
+            }
+            if (document.cookie == '') {
+                document.write(`<a style='float: right;' href="./registration.html">Register</a>
+        <a style='float: right;' href="./login.html">Login</a>`)
+            }
+        </script>
+        <a href="./cart.html" style='float: right;'>Your Cart</a>
+    </div>
+</body>
+
+</html>

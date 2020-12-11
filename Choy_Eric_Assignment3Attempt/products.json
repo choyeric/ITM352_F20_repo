@@ -1,0 +1,58 @@
+{
+    "Ramen": [
+        {
+            "item": "Chicken Ramen",
+            "price": 0.50,
+            "img": "./images/chickenramen.png"
+        },
+        {
+            "item": "Ottogi Ramyonsari",
+            "price": 3.00,
+            "img": "./images/ottogiramyonsari.png"
+        },
+        {
+            "item": "Shin Ramyun",
+            "price": 1.50,
+            "img": "./images/shinramyun.png"
+        },
+        {
+            "item": "Tonkotsu Ramen",
+            "price": 5.00,
+            "img": "/images/tonkotsuramen.png"
+        }
+    ],
+    "Udon": [
+        {
+            "item": "Kitsune Udon",
+            "price": 3.50,
+            "img": "./images/nissininstantkitsuneudon.png"
+        },
+        {
+            "item": "Sanuki Udon",
+            "price": 2.50,
+            "img": "./images/sanuki.png"
+        },
+        {
+            "item": "Tempura Udon",
+            "price": 2.75,
+            "img": "./images/tempuraudon.png"
+        }
+    ],
+    "Pho": [
+        {
+            "item": "Pho Bo",
+            "price": 1.25,
+            "img": "./images/phobo.png"
+        },
+        {
+            "item": "Ricey Pho Bo",
+            "price": 1.75,
+            "img": "./images/riceyphobo.png"
+        },
+        {
+            "item": "Pho Ga",
+            "price": 1.75,
+            "img": "./images/phoga.png"
+        }
+    ]
+}
