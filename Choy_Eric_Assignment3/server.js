@@ -1,23 +1,17 @@
 /* 
 Name: Eric Choy
-Purpose: Hosting a server for assignment 3. Attempt to put all forms on this js to simplify code.
+Purpose: Hosting a server for assignment 3
 */
 
 var querystring = require('querystring');
 var express = require('express'); // Express package
 var app = express();
 var myParser = require("body-parser"); // Parser package
-var products = require('./products.json');
+var products_data = require('./products.json');
 const { request } = require('http');
 var fs = require('fs');
 var qs = require('querystring');
 const { response, query } = require('express');
-
-var cookieParser = require('cookie-parser');
-var session = require('express-session');
-
-app.use(cookieParser());
-app.use(session({ secret: "Love Noodles", saveUninitialized: false, resave: false }));
 
 var input_quantities = []; // For users that inputted quantities for products
 
@@ -30,6 +24,10 @@ app.all('*', function (request, response, next) {
 
 app.use(myParser.urlencoded({ extended: true }));
 
+app.post("/get_products_data", function (request, response) {
+   response.json(products_data);
+});
+
 app.get("/process_page", function (request, response) {
    input_quantities = request.query // for User data
    // check if quantity data is valid
@@ -38,7 +36,7 @@ app.get("/process_page", function (request, response) {
    if (typeof params['purchase_submit'] != 'undefined') {
       has_errors = false; // Borrowed from example on Assignment1
       total_qty = 0;
-      for (i = 0; i < products.length; i++) { // Checking each of the products in the array
+      for (i = 0; i < products_data.length; i++) { // Checking each of the products in the array
          if (typeof params[`quantity${i}`] != 'undefined') {  // If not undefined then move on to the next if statement
             a_qty = params[`quantity${i}`];
             total_qty += a_qty;
@@ -53,9 +51,9 @@ app.get("/process_page", function (request, response) {
          // If quantity is not valid, send them back to the store
          qstr = querystring.stringify(request.query);
          response.redirect("store.html?" + qstr);
-         // If quantity is valid, send an invoice/login page
+         // If quantity is valid, go back to home page to add more
       } else {
-         response.redirect("store.html");
+         response.redirect("invoice.html" + qstr);
       }
    }
 });
@@ -88,27 +86,34 @@ if (fs.existsSync(filename)) {
    exit();
 }
 
-
-
 // Used base from Lab14
-app.post("/login", function (request, response) {
+app.post("/login.html", function (request, response) {
    console.log(input_quantities); // Reports the user input in console
    var id_username = request.body.username;
    id_username = request.body.username.toLowerCase(); // Makes username case insensitive
-   console.log("username = " + id_username) // Tells us what the username they inputted is
+   console.log("username = " + id_username) // Tells us what the username tbey inputted is
    if (typeof user_data[id_username] != 'undefined') {
       if (user_data[id_username].password == request.body.password) {
-         response.cookie('username', id_username).redirect('store.html');
+         quantityQstring = qs.stringify(input_quantities); // If the info is correct, make inputs a string
+         response.cookie('loggeduser', `${id_username}`, {maxAge: 300*1000}); // Sets the name as a cookie for the store to read; courtesy of Prof. Port workshop
+         response.redirect('/store.html?' + `&username=${id_username}`)
       } else {
          error = "Invalid password";
       }
    } else {
       error = "Invalid username";
    }
-
+   request.query.LoginError = error;   // In case of info errors, make the username sticky
+   request.query.StickyLoginUser = id_username;
+   qstring = querystring.stringify(request.query);
+   response.redirect('/login.html?error=' + error);
 });
 
-app.post("/register", function (request, response) {
+app.get("/logout", function (request, response) {
+   response.clearCookie('loggeduser').send(`Successfully logged out! <a href='./store.html'>Return to store.</a>`);
+})
+
+app.post("/registration.html", function (request, response) {
 
    // Make case insensitive
    username = request.body.username.toLowerCase();
@@ -180,7 +185,9 @@ app.post("/register", function (request, response) {
       user_data[username].password = POST["password"];
       user_data[username].email = POST["email"];
 
-      fs.writeFileSync(filename, JSON.stringify(user_data)); //saves/writes registration data into the user_data json file
+      fs.writeFileSync(filename, JSON.stringify(user_data)); //saves/writes registaration data into the user_data json file
+      quantityQstring = qs.stringify(input_quantities); //turns quantity object into a string
+      response.redirect("/invoice.html?" + quantityQstring + `&username=${username}`); //if all good, send to invoice
    }
 
    if (reg_errors.length != 0) {
@@ -189,6 +196,6 @@ app.post("/register", function (request, response) {
       request.query.password = request.body.password;
       request.query.repeat_password = request.body.repeat_password;
       request.query.email = request.body.email;
-      response.redirect('store.html');
+      response.redirect('./registration.html');
    }
 });

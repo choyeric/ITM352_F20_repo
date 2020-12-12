@@ -49,7 +49,6 @@ app.get("/get_cart", function (request, response) {
    response.json(request.session.cart);
 });
 
-
 // Function isNonNegInt taken from Lab13
 function isNonNegInt(stringToCheck, returnErrors = false) { // Checks whether the string is a valid integer
    errors = []; // assume no errors at first
@@ -79,12 +78,11 @@ app.post("/login.html", function (request, response) {
    console.log(input_quantities); // Reports the user input in console
    var id_username = request.body.username;
    id_username = request.body.username.toLowerCase(); // Makes username case insensitive
-   console.log("username = " + id_username) // Tells us what the username tbey inputted is
+   console.log("username = " + id_username) // Tells us what the username they inputted is
    if (typeof user_data[id_username] != 'undefined') {
       if (user_data[id_username].password == request.body.password) {
-         quantityQstring = qs.stringify(input_quantities); // If the info is correct, make inputs a string
          response.cookie('loggeduser', `${id_username}`, {maxAge: 300*1000}); // Sets the name as a cookie for the store to read; courtesy of Prof. Port workshop
-         response.redirect('/store.html?' + `&username=${id_username}`)
+         response.redirect('/store.html?' + `&username=${id_username}`);
       } else {
          error = "Invalid password";
       }
@@ -107,9 +105,6 @@ app.post("/registration.html", function (request, response) {
    // Make case insensitive
    username = request.body.username.toLowerCase();
    email = request.body.email.toLowerCase();
-
-   // Turns quantity object into a string
-   quantityQstring = qs.stringify(input_quantities);
 
    // Variables for error messages
    var reg_errors = [];
@@ -175,8 +170,8 @@ app.post("/registration.html", function (request, response) {
       user_data[username].email = POST["email"];
 
       fs.writeFileSync(filename, JSON.stringify(user_data)); //saves/writes registaration data into the user_data json file
-      quantityQstring = qs.stringify(input_quantities); //turns quantity object into a string
-      response.redirect("/invoice.html?" + quantityQstring + `&username=${username}`); //if all good, send to invoice
+      response.cookie('loggeduser', `${username}`, {maxAge: 300*1000}); // Sets the name as a cookie for the store to read; courtesy of Prof. Port workshop
+      response.redirect('/store.html?' + `&username=${username}`)
    }
 
    if (reg_errors.length != 0) {

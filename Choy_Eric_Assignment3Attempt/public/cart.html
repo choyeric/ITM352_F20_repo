@@ -35,7 +35,7 @@
     <div id="navbar">
         <a href="./store.html"><img src="./images/noodles.png" style='height: 40px;'></a>
         <script>
-            // Following Prof. Port's workshop for cookies to change login buttons
+            // Following Prof. Port's workshop for cookies to change login buttons. Basic nav bar on all pages
             var cookieUser = getCookie('loggeduser');
             if (document.cookie != '') {
                 document.write(`<a style='float: right;' href='./logout'>Logout ${cookieUser}</a>`);
@@ -48,25 +48,53 @@
         <a href="./cart.html" style='float: right;'>Your Cart</a>
     </div>
 
-    <h2>You have in your shopping cart:</h2>
+    <h1>Your Shopping Cart</h1>
     <table>
         <script>
-            // This prints out the user's cart information.
+            subTotal = 0;
+            // This prints out the user's cart information. Used code from Prof Port's example to base off the shopping cart code
             for (product_key in products_data) {
                 for (i = 0; i < products_data[product_key].length; i++) {
                     if (typeof shopping_cart[product_key] == 'undefined') continue;
                     qty = shopping_cart[product_key][i];
                     if (qty > 0) {
-                        document.write(`<section class="item" style='float: left;'>
-        <h2>${products_data[product_key][i].item}</h2>
-        <p>$${products_data[product_key][i].price.toFixed(2)}</p>
-        <img src=${products_data[product_key][i].img}> <br>
-        ${qty}`)
+                        // Calculate the extended total for the amount of each product ordered
+                        extended_price = qty * products_data[product_key][i].price;
+                        subTotal += extended_price;
+                        // Displaying the products chosen along with subtotals
+                        document.write(`<section class="item">
+                                        <h2>${qty} ${products_data[product_key][i].item}</h2>
+                                        <p><strong>$${extended_price.toFixed(2)}</p></strong>
+                                        <img src=${products_data[product_key][i].img}>`);
                     }
                 }
             }
+
+            var salesTax = 0.0471;
+                var tax = subTotal * salesTax;
+
+                // Shipping calculation
+                if (subTotal > 0 && subTotal <= 100) {
+                    shipping = 10;  // If the subtotal is equal or under 100, shipping costs $10
+                } else {
+                    shipping = 0;   // If the subtotal is over 100, no shipping
+                }
+
+                // Grand total, similar to Invoice WOD
+                var grandTotal = subTotal + tax + shipping;
+
+            document.write(`<section class="total">
+                    <h3 style='float: right;'>Subtotal: $${subTotal.toFixed(2)}</h3>
+                    <h3 style='float: right; clear: right;'>Sales Tax: $${tax.toFixed(2)}</h3>
+                    <h3 style='float: right; clear: right;'>Shipping: $${shipping.toFixed(2)}</h3>
+                    <h3 style='float: right; clear: right;'>Grandtotal: $${grandTotal.toFixed(2)}</h3>
+                    <br><br><br>
+                    <form name=confirm_order action="./invoice.html" method="GET">
+                    <input style='float: right; clear: right; display: block;' type="submit" value="Checkout" id="checkout" name="checkout">
+                    </form>`)
         </script>
     </table>
+
 </body>
 
 </html>

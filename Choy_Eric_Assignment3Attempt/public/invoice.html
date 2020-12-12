@@ -18,16 +18,29 @@
         window.location = `./login.html${document.location.search}`;
         window.stop;
     }
+
+    // Gets all the information from server to read in your cart
+    var products_data;
+    loadJSON('get_products_data', function (response) {
+        // Parsing JSON string into object
+        products_data = JSON.parse(response);
+    });;
+    loadJSON('get_cart', function (response) {
+        // Parsing JSON string into object
+        shopping_cart = JSON.parse(response);
+    });
+
     var quantities = [];
-    // Borrowed from example from Assignment1
-    if (params.has('purchase_submit')) {
-        for (i = 0; i < products.length; i++) {
-            if (params.has(`quantity${i}`)) {
-                a_qty = params.get(`quantity${i}`);
+    // Borrowed from example from Assignment1, modified using code from A3 examples to get shopping cart info
+    if (params.has('checkout')) {
+        for (product_key in products_data) {
+        for (i = 0; i < products_data[product_key].length; i++) {
+            if (typeof shopping_cart[product_key] == 'undefined') continue;
+                a_qty = shopping_cart[product_key][i];
                 quantities[i] = a_qty;
             }
-        }
     }
+}
     console.log(quantities);
 </script>
 
@@ -37,6 +50,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zen Noods Receipt</title>
+
     <style>
         body {
             text-align: center;
@@ -78,12 +92,14 @@
 
 <body>
     <header>
-        <h3><script>
-            if (params.has('username')) { // Prints the username on the invoice if they are logged in
-                usr = params.get('username');
-                document.write(`${usr}'s invoice`)
-            }
-        </script></h3>
+        <h3>
+            <script>
+                if (params.has('username')) { // Prints the username on the invoice if they are logged in
+                    usr = params.get('username');
+                    document.write(`${usr}'s invoice`)
+                }
+            </script>
+        </h3>
         <h1>Zen Noods Receipt</h1>
     </header>
     <table border="2">
@@ -96,23 +112,27 @@
             </tr>
 
             <script>
-                // Defining subtotal; same table as old SmartPhoneProducts
+                // Defining subtotal; same table as old SmartPhoneProducts.
+                // Using code from A3 example, modified to work with multiple products
                 subTotal = 0;
-                for (i = 0; i < products.length; i++) {
-                    if (quantities[i] > 0) {
+                for (product_key in products_data) {
+                for (i = 0; i < products_data[product_key].length; i++) {
+                    if (typeof shopping_cart[product_key] == 'undefined') continue;
+                    qty = shopping_cart[product_key][i];
+                    if (qty > 0) {
                         // Product rows
                         extended_price = quantities[i] * products[i].price
                         subTotal += extended_price;
                         document.write(`
                         <tr>
-                            <td width="43%">${products[i].item}</td>
+                            <td width="43%">${products_data[product_key][i].item}</td>
                             <td align="center" width="11%">${quantities[i]}</td>
                             <td width="13%">\$${products[i].price.toFixed(2)}</td>
                             <td width="54%">\$${extended_price.toFixed(2)}</td>
-                        </tr>
-                        `);
+                        </tr>`);
                     }
                 }
+            }
 
                 // Tax rate, similar to Invoice WOD
                 var salesTax = 0.0471;
