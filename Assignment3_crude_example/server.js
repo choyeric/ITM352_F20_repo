@@ -11,6 +11,7 @@ app.all('*', function (request, response, next) {
     // need to initialize an object to store the cart in the session. We do it when there is any request so that we don't have to check it exists
     // anytime it's used
     if(typeof request.session.cart == 'undefined') { request.session.cart = {}; } 
+    console.log(request.session.cart);
     next();
 });
 

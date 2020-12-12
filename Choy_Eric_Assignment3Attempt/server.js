@@ -27,6 +27,7 @@ app.listen(8080, () => console.log(`listening on port 8080`)); // note the use o
 // Code from Prof Port's Assignment 3 example. This is used to make the cart stored in the session
 app.all('*', function (request, response, next) {
    if(typeof request.session.cart == 'undefined') { request.session.cart = {}; } 
+   console.log(request.session.cart);
    console.log(request.method + ' to path ' + request.path);
    next();
 });

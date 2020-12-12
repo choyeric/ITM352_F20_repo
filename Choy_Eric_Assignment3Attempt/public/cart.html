@@ -13,7 +13,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zen Noods</title>
 
-    <link href="style.css" rel="stylesheet">
+    <link href="cart.css" rel="stylesheet">
 
     <script>
         // Gets all the information from server to read in your cart
@@ -21,8 +21,7 @@
         loadJSON('get_products_data', function (response) {
             // Parsing JSON string into object
             products_data = JSON.parse(response);
-        });
-        var shopping_cart = [];
+        });;
         loadJSON('get_cart', function (response) {
                 // Parsing JSON string into object
                 shopping_cart = JSON.parse(response);
@@ -50,16 +49,19 @@
     </div>
 
     <h2>You have in your shopping cart:</h2>
-    <table border>
-        <th>Quantity</th>
-        <th>Item</th>
+    <table>
         <script>
+            // This prints out the user's cart information.
             for (product_key in products_data) {
                 for (i = 0; i < products_data[product_key].length; i++) {
                     if (typeof shopping_cart[product_key] == 'undefined') continue;
                     qty = shopping_cart[product_key][i];
                     if (qty > 0) {
-                        document.write(`<tr><td>${qty}</td><td>${products_data[product_key][i].name}</td><tr>`);
+                        document.write(`<section class="item" style='float: left;'>
+        <h2>${products_data[product_key][i].item}</h2>
+        <p>$${products_data[product_key][i].price.toFixed(2)}</p>
+        <img src=${products_data[product_key][i].img}> <br>
+        ${qty}`)
                     }
                 }
             }
