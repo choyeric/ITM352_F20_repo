@@ -1,0 +1,5 @@
+{
+    "gumballs":[{"name":"smallgumball","price":0.1},{"name":"medgumball","price":0.05},{"name":"largegumball","price":0.25}],
+    "jawbreakers":[{"name":"smalljawbreaker","price":0.10},{"name":"medjawbreaker","price":0.15},{"name":"largejawbreaker","price":0.35}],
+    "peanutbuttercups":[{"name":"smallpeanutbuttercup","price":0.50},{"name":"medpeanutbuttercup","price":0.60},{"name":"largepeanutbuttercup","price":0.75}]
+}

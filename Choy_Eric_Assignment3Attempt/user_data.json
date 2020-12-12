@@ -1,1 +1,75 @@
-{"dport":{"username":"Dan Port","password":"portspassword","email":"dport@hawaii.edu"},"kazman":{"username":"Rick Kazman","password":"kazmanpassword","email":"kazman@hawaii.edu"},"itm352":{"username":"ITM352","password":"grader","email":"itm352@hawaii.edu"},"newuser":{"username":"Joe Schmo","password":"pass","email":"joe@joe.com"},"testing":{"username":"testing","password":"testing","email":"test@test.com","fullname":"Test Name"},"choyeric":{"fullname":"Eric Choy","name":"choyeric","password":"choyeric","email":"choyeric@hawaii.edu"},"jackjill":{"fullname":"Jack Jill","name":"jackjill","password":"jackjill","email":"jack@jill.com"},"karate":{"fullname":"Jackie chan","password":"karate","email":"karate@kid.com"},"jackiechan":{"fullname":"Jackie Chan","password":"karate","email":"karate@kid.com"},"attempt100":{"fullname":"Testing Again","password":"attempt","email":"keep@trying.com"},"thenewguy":{"fullname":"New Dude","password":"newguy","email":"new@guy.com"},"noobie":{"fullname":"Real Noobie","password":"password","email":"pass@word.com"},"richguy":{"fullname":"Rich Guy","password":"richguy","email":"rich@guy.com"},"newacc":{"fullname":"New Person","password":"newacc","email":"new@acc.com"}}
+{
+    "dport": {
+        "username": "Dan Port",
+        "password": "portspassword",
+        "email": "dport@hawaii.edu"
+    },
+    "kazman": {
+        "username": "Rick Kazman",
+        "password": "kazmanpassword",
+        "email": "kazman@hawaii.edu"
+    },
+    "itm352": {
+        "username": "ITM352",
+        "password": "grader",
+        "email": "itm352@hawaii.edu"
+    },
+    "newuser": {
+        "username": "Joe Schmo",
+        "password": "pass",
+        "email": "joe@joe.com"
+    },
+    "testing": {
+        "username": "testing",
+        "password": "testing",
+        "email": "test@test.com",
+        "fullname": "Test Name"
+    },
+    "choyeric": {
+        "fullname": "Eric Choy",
+        "name": "choyeric",
+        "password": "choyeric",
+        "email": "choyeric@hawaii.edu"
+    },
+    "jackjill": {
+        "fullname": "Jack Jill",
+        "name": "jackjill",
+        "password": "jackjill",
+        "email": "jack@jill.com"
+    },
+    "karate": {
+        "fullname": "Jackie chan",
+        "password": "karate",
+        "email": "karate@kid.com"
+    },
+    "jackiechan": {
+        "fullname": "Jackie Chan",
+        "password": "karate",
+        "email": "karate@kid.com"
+    },
+    "attempt100": {
+        "fullname": "Testing Again",
+        "password": "attempt",
+        "email": "keep@trying.com"
+    },
+    "thenewguy": {
+        "fullname": "New Dude",
+        "password": "newguy",
+        "email": "new@guy.com"
+    },
+    "noobie": {
+        "fullname": "Real Noobie",
+        "password": "password",
+        "email": "pass@word.com"
+    },
+    "richguy": {
+        "fullname": "Rich Guy",
+        "password": "richguy",
+        "email": "rich@guy.com"
+    },
+    "newacc": {
+        "fullname": "New Person",
+        "password": "newacc",
+        "email": "new@acc.com"
+    }
+}

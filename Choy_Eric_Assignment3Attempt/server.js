@@ -1,6 +1,7 @@
 /* 
 Name: Eric Choy
-Purpose: Hosting a server for assignment 2
+Purpose: Hosting a server for assignment 3
+Code credit: A lot of code is used from Professor Port's A3 example. Some restructured to match my files and overall format of website.
 */
 
 var querystring = require('querystring');
@@ -11,51 +12,36 @@ var products_data = require('./products.json');
 const { request } = require('http');
 var fs = require('fs');
 var qs = require('querystring');
+var session = require('express-session'); 
 const { response, query } = require('express');
 
 var input_quantities = []; // For users that inputted quantities for products
 
+app.use(myParser.urlencoded({ extended: true }));
+app.use(session({secret: "ITM352 rocks!"}));
 
-// Code from Lab13
+// Code from Prof Port's Assignment 3 example. This is used to make the cart stored in the session
 app.all('*', function (request, response, next) {
+   if(typeof request.session.cart == 'undefined') { request.session.cart = {}; } 
    console.log(request.method + ' to path ' + request.path);
    next();
 });
 
-app.use(myParser.urlencoded({ extended: true }));
-
-app.post("/get_products_data", function (request, response) {
+app.get("/get_products_data", function (request, response) {
    response.json(products_data);
 });
 
-app.get("/process_page", function (request, response) {
-   input_quantities = request.query // for User data
-   // check if quantity data is valid
-   params = request.query;
-   console.log(params);
-   if (typeof params['purchase_submit'] != 'undefined') {
-      has_errors = false; // Borrowed from example on Assignment1
-      total_qty = 0;
-      for (i = 0; i < products_data.length; i++) { // Checking each of the products in the array
-         if (typeof params[`quantity${i}`] != 'undefined') {  // If not undefined then move on to the next if statement
-            a_qty = params[`quantity${i}`];
-            total_qty += a_qty;
-            if (!isNonNegInt(a_qty)) {
-               has_errors = true; //oops, invalid quantity
-            }
-         }
-      }
-      console.log(has_errors, total_qty);
-      qstr = querystring.stringify(request.query);
-      if (has_errors || total_qty == 0) {
-         // If quantity is not valid, send them back to the store
-         qstr = querystring.stringify(request.query);
-         response.redirect("store.html?" + qstr);
-         // If quantity is valid, go back to home page to add more
-      } else {
-         response.redirect("invoice.html" + qstr);
-      }
-   }
+// This should send all the information of what the user is sending to their cart to the server to save. Borrowed from Prof Port's Assignment 3 example
+app.get("/add_to_cart", function (request, response) {
+   // Get the product name from the key, store quantities, then paste them all into the cart to show user what they have added
+   var products_key = request.query['products_key'];
+   var quantities = request.query['quantities'].map(Number);
+   request.session.cart[products_key] = quantities;
+   response.redirect('./cart.html');
+});
+
+app.get("/get_cart", function (request, response) {
+   response.json(request.session.cart);
 });
 
 // Used code from Lab13
@@ -86,7 +72,7 @@ if (fs.existsSync(filename)) {
    exit();
 }
 
-// Used base from Lab14
+// Used base from Lab14. Logs user and displays their name along with generating a cookie based on their username for security
 app.post("/login.html", function (request, response) {
    console.log(input_quantities); // Reports the user input in console
    var id_username = request.body.username;
@@ -109,6 +95,7 @@ app.post("/login.html", function (request, response) {
    response.redirect('/login.html?error=' + error);
 });
 
+// Logout button should "logout" the user and destroy the cookie, thus removing all shopping data
 app.get("/logout", function (request, response) {
    response.clearCookie('loggeduser').send(`Successfully logged out! <a href='./store.html'>Return to store.</a>`);
 })

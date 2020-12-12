@@ -1,7 +1,8 @@
-<script src="./products.js">
+<script>
     /* From the workshop powerpoint
     Name: Eric Choy
     Purpose: Assignment 3 cart page
+    Credit: Prof Port's cart file for his A3 example
     */</script>
 <script src="./functions.js"></script>
 
@@ -13,6 +14,21 @@
     <title>Zen Noods</title>
 
     <link href="style.css" rel="stylesheet">
+
+    <script>
+        // Gets all the information from server to read in your cart
+        var products_data;
+        loadJSON('get_products_data', function (response) {
+            // Parsing JSON string into object
+            products_data = JSON.parse(response);
+        });
+        var shopping_cart = [];
+        loadJSON('get_cart', function (response) {
+                // Parsing JSON string into object
+                shopping_cart = JSON.parse(response);
+        });
+    </script>
+
 </head>
 
 <body>
@@ -32,6 +48,23 @@
         </script>
         <a href="./cart.html" style='float: right;'>Your Cart</a>
     </div>
+
+    <h2>You have in your shopping cart:</h2>
+    <table border>
+        <th>Quantity</th>
+        <th>Item</th>
+        <script>
+            for (product_key in products_data) {
+                for (i = 0; i < products_data[product_key].length; i++) {
+                    if (typeof shopping_cart[product_key] == 'undefined') continue;
+                    qty = shopping_cart[product_key][i];
+                    if (qty > 0) {
+                        document.write(`<tr><td>${qty}</td><td>${products_data[product_key][i].name}</td><tr>`);
+                    }
+                }
+            }
+        </script>
+    </table>
 </body>
 
 </html>

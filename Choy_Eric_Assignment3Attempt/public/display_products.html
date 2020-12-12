@@ -16,11 +16,19 @@
         document.stop;
     }
 
+    // Both loadJSON borrowed from Prof Port's example.
     var products_data;
     loadJSON('get_products_data', function (response) {
         // Parsing JSON string into object
         products_data = JSON.parse(response);
     });
+    loadJSON('get_cart', function (response) {
+            // Parsing JSON string into object
+            shopping_cart = JSON.parse(response);
+            for (pk in shopping_cart) {
+                total += shopping_cart[pk].reduce((a, b) => a + b);
+            }
+        });
 
     function isNonNegInt(stringToCheck, returnErrors = false) { // Checks whether the string is a valid integer
         errors = []; // Borrowed from the example on Assignment1
@@ -37,40 +45,6 @@
         if (errs.length == 0) errs = ['Quantity:']; // When typing in the textbox, this will display 
         if (theTextbox.value.trim() == '') errs = ['Quantity:'];
         document.getElementById(theTextbox.name + '_label').innerHTML = errs.join(", ");
-    }
-
-    window.onload = function () { // Borrowed from example on Assignment1
-        let params = (new URL(document.location)).searchParams; // get the query string which has the form data
-        // form was submitted so check that quantities are valid then redirect to invoice if ok.
-
-        var this_product_key = ''
-        for (products_key in products_data) {
-            if (params.has('purchase_submit')) {
-                has_errors = false; // assume quantities are valid from the start
-                total_qty = 0;
-                for (i = 0; i < products_data.length; i++) {
-                    if (params.has(`quantity${i}`)) {
-                        a_qty = params.get(`quantity${i}`);
-                        // make textboxes sticky in case of invalid data
-                        purchase_order[`quantity${i}`].value = a_qty;
-                        total_qty += a_qty;
-                        if (!isNonNegInt(a_qty)) {
-                            has_errors = true; // oops, invalid quantity
-                            checkQuantityTextbox(purchase_order[`quantity${i}`]); // show where the error is
-                        }
-                    }
-                }
-                // Now respond to errors or redirect to invoice if all is ok
-                if (has_errors) {
-                    alert("Please enter only valid quantities!");
-                } else if (total_qty == 0) { // no quantity selections, just give a general alert
-                    alert("Please select quantities!");
-                } else { // all good to go! will go to invoice page
-                    window.location = `./invoice.html${document.location.search}`;
-                    window.stop;
-                }
-            }
-        }
     }
 </script>
 
@@ -97,7 +71,7 @@
     </script>
 
     <script>
-        // Following Prof. Port's workshop for cookies to change login buttons
+        // Following Prof. Port's workshop for cookies to change login buttons. Login and register would be rewritten as the username
         var cookieUser = getCookie('loggeduser');
         if (document.cookie != '') {
             document.write(`<a style='float: right;' href='./logout'>Logout ${cookieUser}</a>`);
@@ -110,10 +84,10 @@
     <a href="./cart.html" style='float: right;'>Your Cart</a>
 </div>
 
-<form name=purchase_order action="process_page" method="GET">
+<form name=purchase_order action="add_to_cart" method="GET">
     <INPUT type="hidden" NAME="products_key" VALUE="${this_products_key}">
     <script>
-        // Loop to go through all products of this specific key. Used example code from Assignment3 for overall form format
+        // Loop to go through all products of this specific key. Used example code from Assignment3 for overall code format but table reconstructed
         products = products_data[this_products_key];
         for (i = 0; i < products.length; i++) {
             document.write(` <section class="item" style='float: left;'>
@@ -121,10 +95,10 @@
         <p>$${products[i].price.toFixed(2)}</p>
         <img src=${products[i].img}> <br>
         <label id="quantity${i}_label" }">Quantity:</label>
-        <input type="text" placeholder="0" name="quantity${i}" onkeyup="checkQuantityTextbox(this);">
+        <input type="text" placeholder="0" name="quantities[${i}]" onkeyup="checkQuantityTextbox(this);">
         </section>`
             );
         }
     </script>
-    <input type="submit" value="Add to cart" name="purchase_submit">
+    <input type="submit" value="Add to cart" name="add_to_cart">
 </FORM>
