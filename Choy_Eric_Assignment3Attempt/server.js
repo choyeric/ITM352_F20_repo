@@ -20,6 +20,10 @@ var input_quantities = []; // For users that inputted quantities for products
 app.use(myParser.urlencoded({ extended: true }));
 app.use(session({secret: "ITM352 rocks!"}));
 
+// Used code from Lab13
+app.use(express.static('./public'));
+app.listen(8080, () => console.log(`listening on port 8080`)); // note the use of an anonymous function here
+
 // Code from Prof Port's Assignment 3 example. This is used to make the cart stored in the session
 app.all('*', function (request, response, next) {
    if(typeof request.session.cart == 'undefined') { request.session.cart = {}; } 
@@ -44,9 +48,6 @@ app.get("/get_cart", function (request, response) {
    response.json(request.session.cart);
 });
 
-// Used code from Lab13
-app.use(express.static('./public'));
-app.listen(8080, () => console.log(`listening on port 8080`)); // note the use of an anonymous function here
 
 // Function isNonNegInt taken from Lab13
 function isNonNegInt(stringToCheck, returnErrors = false) { // Checks whether the string is a valid integer
