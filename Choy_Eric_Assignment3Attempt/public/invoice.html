@@ -1,7 +1,7 @@
-<script src="./products.js"> /* From the workshop powerpoint */
+<script src="./functions.js"> /* From the workshop powerpoint */
     /*
     Name: Eric Choy
-    Purpose: Assignment 2 invoice page layout
+    Purpose: Assignment 3 invoice page layout
     */
 </script>
 
@@ -11,8 +11,10 @@
     let params = (new URL(document.location)).searchParams;
 
     // If there is a user logged in
-    if (params.has('username')) {
-        alert(`Hello ${params.get('username')}. Thank you for your purchase.`);
+    var cookieUser = getCookie('loggeduser');
+    if (document.cookie != '') {
+        alert(`Hello ${cookieUser}. Thank you for your purchase.`);
+        document.write(`<a style='float: right;' href='./logout'>Logout ${cookieUser}</a>`);
     } else { // If there is nobody logged in, direct to login page
         alert('you must login or register first');
         window.location = `./login.html${document.location.search}`;
@@ -34,13 +36,13 @@
     // Borrowed from example from Assignment1, modified using code from A3 examples to get shopping cart info
     if (params.has('checkout')) {
         for (product_key in products_data) {
-        for (i = 0; i < products_data[product_key].length; i++) {
-            if (typeof shopping_cart[product_key] == 'undefined') continue;
+            for (i = 0; i < products_data[product_key].length; i++) {
+                if (typeof shopping_cart[product_key] == 'undefined') continue;
                 a_qty = shopping_cart[product_key][i];
                 quantities[i] = a_qty;
             }
+        }
     }
-}
     console.log(quantities);
 </script>
 
@@ -92,14 +94,6 @@
 
 <body>
     <header>
-        <h3>
-            <script>
-                if (params.has('username')) { // Prints the username on the invoice if they are logged in
-                    usr = params.get('username');
-                    document.write(`${usr}'s invoice`)
-                }
-            </script>
-        </h3>
         <h1>Zen Noods Receipt</h1>
     </header>
     <table border="2">
@@ -116,23 +110,23 @@
                 // Using code from A3 example, modified to work with multiple products
                 subTotal = 0;
                 for (product_key in products_data) {
-                for (i = 0; i < products_data[product_key].length; i++) {
-                    if (typeof shopping_cart[product_key] == 'undefined') continue;
-                    qty = shopping_cart[product_key][i];
-                    if (qty > 0) {
-                        // Product rows
-                        extended_price = quantities[i] * products[i].price
-                        subTotal += extended_price;
-                        document.write(`
+                    for (i = 0; i < products_data[product_key].length; i++) {
+                        if (typeof shopping_cart[product_key] == 'undefined') continue;
+                        qty = shopping_cart[product_key][i];
+                        if (qty > 0) {
+                            // Product rows
+                            extended_price = quantities[i] * products_data[product_key][i].price
+                            subTotal += extended_price;
+                            document.write(`
                         <tr>
                             <td width="43%">${products_data[product_key][i].item}</td>
-                            <td align="center" width="11%">${quantities[i]}</td>
-                            <td width="13%">\$${products[i].price.toFixed(2)}</td>
+                            <td align="center" width="11%">${qty}</td>
+                            <td width="13%">\$${products_data[product_key][i].price.toFixed(2)}</td>
                             <td width="54%">\$${extended_price.toFixed(2)}</td>
                         </tr>`);
+                        }
                     }
                 }
-            }
 
                 // Tax rate, similar to Invoice WOD
                 var salesTax = 0.0471;
@@ -162,7 +156,8 @@
             </tr>
             <tr>
                 <td style="text-align: center;" colspan="3" width="67%"><span>Tax @
-                        <script>document.write(salesTax * 100)</script>%</span></td>
+                        <script>document.write(salesTax * 100)</script>%
+                    </span></td>
                 <td width="54%">$
                     <script>
                         document.write(tax.toFixed(2));
@@ -182,7 +177,8 @@
                 <td width="54%"><strong>$
                         <script>
                             document.write(grandTotal.toFixed(2));
-                        </script></strong></td>
+                        </script>
+                    </strong></td>
             </tr>
             <td style="text-align: left;" colspan="4" width="121%"><strong>
                     SHIPPING POLICY: <br>
@@ -196,7 +192,11 @@
 </body>
 <footer>
     <br>
-    <strong>Thank you for your purchase!</strong>
+    <script>document.write(`<strong>Thank you ${cookieUser} for your purchase!</strong> <br><br>
+    <form name=email action="/email" method="GET">
+    <input type="submit" style='font-size: 20px;' value="Click here to send an email of your invoice!">
+    </form>`);
+    </script>
 </footer>
 
 </html>

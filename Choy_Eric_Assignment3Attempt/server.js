@@ -12,21 +12,17 @@ var products_data = require('./products.json');
 const { request } = require('http');
 var fs = require('fs');
 var qs = require('querystring');
-var session = require('express-session'); 
+var session = require('express-session');
 const { response, query } = require('express');
 
 var input_quantities = []; // For users that inputted quantities for products
 
 app.use(myParser.urlencoded({ extended: true }));
-app.use(session({secret: "ITM352 rocks!"}));
-
-// Used code from Lab13
-app.use(express.static('./public'));
-app.listen(8080, () => console.log(`listening on port 8080`)); // note the use of an anonymous function here
+app.use(session({ secret: "ITM352 rocks!" }));
 
 // Code from Prof Port's Assignment 3 example. This is used to make the cart stored in the session
 app.all('*', function (request, response, next) {
-   if(typeof request.session.cart == 'undefined') { request.session.cart = {}; } 
+   if (typeof request.session.cart == 'undefined') { request.session.cart = {}; }
    console.log(request.session.cart);
    console.log(request.method + ' to path ' + request.path);
    next();
@@ -75,13 +71,12 @@ if (fs.existsSync(filename)) {
 
 // Used base from Lab14. Logs user and displays their name along with generating a cookie based on their username for security
 app.post("/login.html", function (request, response) {
-   console.log(input_quantities); // Reports the user input in console
    var id_username = request.body.username;
    id_username = request.body.username.toLowerCase(); // Makes username case insensitive
    console.log("username = " + id_username) // Tells us what the username they inputted is
    if (typeof user_data[id_username] != 'undefined') {
       if (user_data[id_username].password == request.body.password) {
-         response.cookie('loggeduser', `${id_username}`, {maxAge: 300*1000}); // Sets the name as a cookie for the store to read; courtesy of Prof. Port workshop
+         response.cookie('loggeduser', `${id_username}`, { maxAge: 300 * 1000 }); // Sets the name as a cookie for the store to read; courtesy of Prof. Port workshop
          response.redirect('/store.html?' + `&username=${id_username}`);
       } else {
          error = "Invalid password";
@@ -89,16 +84,15 @@ app.post("/login.html", function (request, response) {
    } else {
       error = "Invalid username";
    }
-   request.query.LoginError = error;   // In case of info errors, make the username sticky
-   request.query.StickyLoginUser = id_username;
-   qstring = querystring.stringify(request.query);
    response.redirect('/login.html?error=' + error);
 });
 
-// Logout button should "logout" the user and destroy the cookie, thus removing all shopping data
+// Logout button should "logout" the user and destroy the cookie
+// Also destroys the session so all shopping info is deleted once logout happens.
 app.get("/logout", function (request, response) {
    response.clearCookie('loggeduser').send(`Successfully logged out! <a href='./store.html'>Return to store.</a>`);
-})
+   request.session.destroy();
+});
 
 app.post("/registration.html", function (request, response) {
 
@@ -170,7 +164,7 @@ app.post("/registration.html", function (request, response) {
       user_data[username].email = POST["email"];
 
       fs.writeFileSync(filename, JSON.stringify(user_data)); //saves/writes registaration data into the user_data json file
-      response.cookie('loggeduser', `${username}`, {maxAge: 300*1000}); // Sets the name as a cookie for the store to read; courtesy of Prof. Port workshop
+      response.cookie('loggeduser', `${username}`, { maxAge: 300 * 1000 }); // Sets the name as a cookie for the store to read; courtesy of Prof. Port workshop
       response.redirect('/store.html?' + `&username=${username}`)
    }
 
@@ -183,3 +177,45 @@ app.post("/registration.html", function (request, response) {
       response.redirect('./registration.html');
    }
 });
+
+// Trying to send email from invoice code
+const nodemailer = require("nodemailer");
+
+// Borrowed the "checkout" code from Prof. Port's example and modified to use as a button from the invoice page
+app.get("/email", function (request, response) {
+   // Create a string to print out the email lines
+   var invoice_str = `Thank you for ordering from us!`
+   // create reusable transporter object using the default SMTP transport
+   var transporter = nodemailer.createTransport({
+      host: "mail.hawaii.edu",
+      port: 25,
+      secure: false, // use TLS
+      tls: {
+         // do not fail on invalid certs
+         rejectUnauthorized: false
+      }
+   });
+
+   var user_email = "";
+   var mailOptions = {
+      from: 'eric@zennoods.com',
+      to: user_email,
+      subject: 'Your Invoice',
+      html: invoice_str
+   };
+
+   transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+         invoice_str += '<br>We are sorry, your email failed to send.';
+      } else {
+         invoice_str += `<br>Your invoice was sent to ${user_email}`;
+      }
+      invoice_str += `<br><a href='./logout'>Logout and return to store</a>`
+      response.send(invoice_str);
+   });
+
+});
+
+// Used code from Lab13
+app.use(express.static('./public'));
+app.listen(8080, () => console.log(`listening on port 8080`)); // note the use of an anonymous function here
