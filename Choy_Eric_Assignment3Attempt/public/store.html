@@ -21,7 +21,7 @@
         <a href="./store.html"><img src="./images/noodles.png" style='height: 40px;'></a>
 
         <script>
-            // Following Prof. Port's workshop for cookies to change login buttons
+            // Following Prof. Port's workshop for cookies to change login buttons. If a user is logged in it will display a logout button
             var cookieUser = getCookie('loggeduser');
             if (document.cookie != '') {
                 document.write(`<a style='float: right;' href='./logout'>Logout ${cookieUser}</a>`);
