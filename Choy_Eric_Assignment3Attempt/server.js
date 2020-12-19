@@ -66,6 +66,7 @@ function isNonNegInt(stringToCheck, returnErrors = false) { // Checks whether th
 
 // Borrowed from Lab14
 var filename = "user_data.json";
+var user_data = "";
 
 if (fs.existsSync(filename)) {
    data = fs.readFileSync(filename, 'utf-8');
@@ -76,6 +77,50 @@ if (fs.existsSync(filename)) {
    console.log("Sorry can't read file " + filename);
    exit();
 }
+
+// Trying to send email from invoice code
+const nodemailer = require("nodemailer");
+
+// Borrowed the "checkout" code from Prof. Port's example and modified to use as a button from the invoice page
+app.get("/email", function (request, response) {
+
+   // Create a string to print out the email lines
+   var invoice_str = `Thank you for ordering from us!`
+   // create reusable transporter object using the default SMTP transport
+
+   var username = request.session.cookie['loggeduser'];
+
+   var user_email = user_data[username].email;
+
+   var transporter = nodemailer.createTransport({
+      host: "mail.hawaii.edu",
+      port: 25,
+      secure: false, // use TLS
+      tls: {
+         // do not fail on invalid certs
+         rejectUnauthorized: false
+      }
+   });
+
+   // Use cookie to draw info from the array
+   var mailOptions = {
+      from: 'eric@zennoods.com',
+      to: user_email['email'],
+      subject: 'Your Invoice',
+      html: invoice_str
+   };
+
+   transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+         invoice_str += '<br>We are sorry, your email failed to send.';
+      } else {
+         invoice_str += `<br>Your invoice was sent to ${user_email}`;
+      }
+      invoice_str += `<br><a href='./logout'>Logout and return to store</a>`
+      response.send(invoice_str);
+   });
+
+});
 
 // Used base from Lab14. Logs user and displays their name along with generating a cookie based on their username for security
 app.post("/login.html", function (request, response) {
@@ -186,45 +231,6 @@ app.post("/registration.html", function (request, response) {
    }
 });
 
-// Trying to send email from invoice code
-const nodemailer = require("nodemailer");
-
-// Borrowed the "checkout" code from Prof. Port's example and modified to use as a button from the invoice page
-app.get("/email", function (request, response) {
-
-   // Create a string to print out the email lines
-   var invoice_str = `Thank you for ordering from us!`
-   // create reusable transporter object using the default SMTP transport
-   var transporter = nodemailer.createTransport({
-      host: "mail.hawaii.edu",
-      port: 25,
-      secure: false, // use TLS
-      tls: {
-         // do not fail on invalid certs
-         rejectUnauthorized: false
-      }
-   });
-
-   // Use cookie to draw info from the array
-   var user_email = user_data['username'].email;
-   var mailOptions = {
-      from: 'eric@zennoods.com',
-      to: user_email,
-      subject: 'Your Invoice',
-      html: invoice_str
-   };
-
-   transporter.sendMail(mailOptions, function (error, info) {
-      if (error) {
-         invoice_str += '<br>We are sorry, your email failed to send.';
-      } else {
-         invoice_str += `<br>Your invoice was sent to ${user_email}`;
-      }
-      invoice_str += `<br><a href='./logout'>Logout and return to store</a>`
-      response.send(invoice_str);
-   });
-
-});
 
 // Used code from Lab13
 app.use(express.static('./public'));
