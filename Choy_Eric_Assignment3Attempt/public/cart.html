@@ -26,20 +26,6 @@
             // Parsing JSON string into object
             shopping_cart = JSON.parse(response);
         });
-
-        // Testing. Can't figure it out sadly
-        // This is to remove the item from the cart. First retrieve item from storage then remove using loop to check names
-        function removeItem() {
-
-            for (product_key in products_data) {
-                for (i = 0; i < products_data[product_key].length; i++) {
-                    if (typeof shopping_cart[product_key] == 'undefined') continue;
-                    qty = shopping_cart[product_key][i];
-                    qty = 0;
-                    window.location.reload(true);
-                }
-            }
-        }
     </script>
 
 </head>
@@ -76,10 +62,19 @@
                         extended_price = qty * products_data[product_key][i].price;
                         subTotal += extended_price;
                         // Displaying the products chosen along with subtotals
-                        document.write(`<section class="item">
-                                        <h2 id='orderedItem'>${qty} ${products_data[product_key][i].item}</h2>
-                                        <p><strong>$${extended_price.toFixed(2)}  <input type='button' value="Remove item" onclick="removeItem()"></p></strong>
-                                        <img src=${products_data[product_key][i].img}>`);
+                        var cartForm = '';
+
+                        cartForm += `
+                        <form name=purchase_order action="remove_item" method="GET">
+                            <INPUT type="hidden" NAME="products_key" VALUE="${product_key}">
+                                <section class="item">
+                                <h2 id='orderedItem'>${qty} ${products_data[product_key][i].item}</h2>
+                                <p><strong>$${extended_price.toFixed(2)} <input type='submit' value="Remove item" name="ordered[${i}]" onclick="remove_item"></p></strong>
+                                <img src=${products_data[product_key][i].img}>
+                                </section>
+                        </FORM>`
+
+                        document.write(cartForm);
                     }
                 }
             }

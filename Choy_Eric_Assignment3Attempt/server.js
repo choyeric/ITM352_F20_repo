@@ -45,6 +45,14 @@ app.get("/get_cart", function (request, response) {
    response.json(request.session.cart);
 });
 
+// This removes the item from the cart that the user does not want anymore by setting the quantity to 0
+app.get("/remove_item", function (request, response) {
+   var products_key = request.query['products_key'];
+   var ordered_item = request.query['ordered'].map(Number);
+   request.session.cart[products_key] = ordered_item;
+   response.redirect('./cart.html');
+});
+
 // Function isNonNegInt taken from Lab13
 function isNonNegInt(stringToCheck, returnErrors = false) { // Checks whether the string is a valid integer
    errors = []; // assume no errors at first
@@ -183,6 +191,7 @@ const nodemailer = require("nodemailer");
 
 // Borrowed the "checkout" code from Prof. Port's example and modified to use as a button from the invoice page
 app.get("/email", function (request, response) {
+
    // Create a string to print out the email lines
    var invoice_str = `Thank you for ordering from us!`
    // create reusable transporter object using the default SMTP transport
@@ -196,7 +205,8 @@ app.get("/email", function (request, response) {
       }
    });
 
-   var user_email = "";
+   // Use cookie to draw info from the array
+   var user_email = user_data['username'].email;
    var mailOptions = {
       from: 'eric@zennoods.com',
       to: user_email,

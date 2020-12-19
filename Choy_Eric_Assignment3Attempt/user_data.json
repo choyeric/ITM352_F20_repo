@@ -41,5 +41,10 @@
         "fullname": "Jackie chan",
         "password": "karate",
         "email": "karate@kid.com"
+    },
+    "finaltest": {
+        "fullname": "Final Test",
+        "password": "finaltest",
+        "email": "final@test.com"
     }
 }
