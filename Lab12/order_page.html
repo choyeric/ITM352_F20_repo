@@ -21,6 +21,7 @@
             return returnErrors ? errors : (errors.length == 0);
         }
 
+        // This function reads the input and spits out errors if they are encountered
         function checkQuantityTextbox() {
             errs = isNonNegInt(quantity_textbox.value, true);
             quantity_textbox_message.innerHTML = errs.join(", ");
